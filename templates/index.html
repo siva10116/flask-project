@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Personal Expense Tracker</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h1>Personal Expense Tracker</h1>
+<a href="/add">Add Expense</a>
+<br><br>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Item</th>
+<th>Amount</th>
+<th>Category</th>
+<th>Date</th>
+<th>Actions</th>
+</tr>
+
+{% set total = namespace(value=0) %}
+{% for expense in expenses %}
+<tr>
+<td>{{expense.id}}</td>
+<td>{{expense.item}}</td>
+<td>${{ "%.2f"|format(expense.amount) }}</td>
+<td>{{expense.category}}</td>
+<td>{{expense.date.strftime('%Y-%m-%d %H:%M:%S')}}</td>
+<td>
+<a href="/update/{{expense.id}}">Edit</a>
+<a href="/delete/{{expense.id}}">Delete</a>
+</td>
+</tr>
+{% set total.value = total.value + expense.amount %}
+{% endfor %}
+
+<tr>
+<td colspan="2" style="text-align:right;"><strong>Total Spending:</strong></td>
+<td colspan="4"><strong>${{ "%.2f"|format(total.value) }}</strong></td>
+</tr>
+
+</table>
+
+</body>
+</html>
